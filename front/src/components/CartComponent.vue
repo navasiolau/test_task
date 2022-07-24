@@ -1,27 +1,39 @@
 <template>
-  <form @submit="postData" method="post">
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Option name</label>
-      <input type="text" class="form-control" v-model="cart.name" required aria-describedby="nameHelp">
-      <div id="nameHelp" class="form-text">input option name pls</div>
-    </div>
-    <button type="submit" class="btn btn-primary">Add</button>
-  </form>
+  <CreateCartComponent />
+
+  <SelectComponent
+    :options="options"
+    @updateParent="updateOptions"
+  />
 </template>
 
-<script lang="ts">
+<script>
+import axios from "axios";
+import CreateCartComponent from "@/components/CreateCartComponent.vue";
+import SelectComponent from "@/components/SelectComponent.vue";
+
 export default {
   name: "CartComponent",
+  components: {
+    CreateCartComponent,
+    SelectComponent
+  },
+
   data() {
     return {
-      cart: {
-        name: ''
-      }
+      options: []
     }
   },
+  mounted() {
+    axios
+        .get('http://localhost:8081/carts')
+        .then(response => {
+          this.options = response.data.carts
+        })
+  },
   methods: {
-    postData(e: { preventDefault: () => void; }) {
-      e.preventDefault();
+    updateOptions(options) {
+      this.options = options
     }
   }
 }

@@ -1,0 +1,172 @@
+<template>
+  <div class="d-flex align-items-start">
+    <div class="v-select d-inline-block">
+      <p>Carts</p>
+      <div>
+        <form>
+          <div class="mt-1">
+            <input type="text" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
+          </div>
+        </form>
+      </div>
+      <div
+          class="options"
+      >
+        <template
+            v-for="option in options"
+            :key="option.id"
+        >
+          <p
+              v-if="!option.isSelected"
+              @click="selectOption(option)" :class="{selectable:selected == option.id}"
+              v-bind:id="option.id"
+          >
+            {{ option.name }}
+          </p>
+        </template>
+      </div>
+    </div>
+    <div class="v-select d-inline-block d-flex justify-content-center align-items-center ">
+      <form class="align-self-center" @submit.prevent="moveAllOptions()" method="post">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-right"></i></button>
+      </form>
+      <form class="align-self-center" @submit.prevent="moveOneOption()" method="post">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-right"></i></button>
+      </form>
+      <form class="align-self-center" @submit.prevent="moveOneOptionBack()" method="post">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-left"></i></button>
+      </form>
+      <form class="align-self-center" @submit.prevent="moveAllOptionsBack()" method="post">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-left"></i></button>
+      </form>
+    </div>
+    <div class="v-select d-inline-block">
+      <p>Selected carts</p>
+      <div>
+        <form>
+          <div class="mt-1">
+            <input type="text" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
+          </div>
+        </form>
+      </div>
+      <div
+          class="options"
+      >
+        <template
+            v-for="option in options"
+            :key="option.id"
+        >
+          <p
+              v-if="option.isSelected"
+              @click="selectOption(option)" :class="{selectable:selected == option.id}"
+              v-bind:id="option.id"
+          >
+            {{ option.name }}
+          </p>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "SelectComponent",
+  data() {
+    return {
+      selected: 0
+    }
+  },
+  props: {
+    options: {
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
+  methods: {
+    selectOption(option) {
+      this.selected = option.id
+    },
+    updateParentOptions() {
+      axios
+          .get('http://localhost:8081/carts')
+          .then(response => {
+            this.$emit('updateParent', response.data.carts)
+          })
+    },
+    moveOneOption() {
+      const form = new FormData();
+      form.append('name', this.$el.querySelector(".selectable").innerText);
+      form.append('isSelected', 'true');
+      axios.post("http://localhost:8081/carts/" + this.$el.querySelector(".selectable").id, form)
+          .then(() => this.updateParentOptions())
+    },
+    moveOneOptionBack() {
+      const form = new FormData();
+      form.append('name', this.$el.querySelector(".selectable").innerText);
+      form.append('isSelected', 'false');
+      axios.post("http://localhost:8081/carts/" + this.$el.querySelector(".selectable").id, form)
+          .then(() => this.updateParentOptions())
+    },
+    moveAllOptions() {
+      for (const option of this.options) {
+        if (option.isSelected == false) {
+          const form = new FormData();
+          form.append('name', option.name);
+          form.append('isSelected', 'true');
+          axios.post("http://localhost:8081/carts/" + option.id, form)
+        }
+      }
+
+      this.updateParentOptions()
+    },
+    moveAllOptionsBack() {
+      for (const option of this.options) {
+        if (option.isSelected == true) {
+          const form = new FormData();
+          form.append('name', option.name);
+          form.append('isSelected', 'false');
+          axios.post("http://localhost:8081/carts/" + option.id, form)
+        }
+      }
+
+      this.updateParentOptions()
+    },
+  }
+}
+</script>
+
+<style scoped>
+  .v-select {
+    width: 100%;
+    min-height: 300px;
+    cursor: pointer;
+  }
+
+  .v-select p {
+    margin: 0;
+  }
+
+  .options {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+    top: 20px;
+    right: 0;
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .options p:hover {
+    background: #e7e7e7;
+  }
+
+  .selectable{
+    background: #e7e7e7;
+  }
+</style>
