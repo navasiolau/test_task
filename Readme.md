@@ -14,3 +14,6 @@
 8. docker exec -it front__node bash
 9. npm install
 10. npm run build
+
+#### Now you can see app on: [http://localhost:8080/](http://localhost:8080/)
+#### Api URL: [http://localhost:8081/carts](http://localhost:8081/carts)
