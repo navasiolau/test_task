@@ -7,20 +7,30 @@ namespace App\Service;
 use App\DTO\CartDTO;
 use App\DTO\CartListDTO;
 use App\Entity\Cart;
+use App\Exception\ValidationException;
 use App\Repository\CartRepository;
 use App\Request\CartUpsertRequest;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CartService
 {
     public function __construct(
         private readonly CartRepository $cartRepository,
+        private readonly ValidatorInterface $validator
     ) {
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function create(CartUpsertRequest $request): void
     {
-        $cart = new Cart();
-        $cart->setName($request->getName());
+        $cart = new Cart($request->getName());
+
+        $errors = $this->validator->validate($cart);
+        if ($errors->count() > 0) {
+            throw new ValidationException($errors);
+        }
 
         $this->cartRepository->add($cart, true);
     }

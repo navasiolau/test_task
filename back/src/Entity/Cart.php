@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\CartRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
@@ -16,17 +17,25 @@ class Cart
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    private string $name;
 
     #[ORM\Column]
-    private bool $isSelected = false;
+    private bool $isSelected;
+
+    public function __construct(string $name, bool $isSelected = false)
+    {
+        $this->name = $name;
+        $this->isSelected = $isSelected;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
