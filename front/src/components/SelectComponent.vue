@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex align-items-start">
-    <div class="v-select d-inline-block">
+  <div class="row align-items-start">
+    <div class="col-md-5 v-select d-inline-block">
       <p>Carts</p>
       <div>
         <form>
@@ -28,21 +28,23 @@
         <p v-if="searchTermOne.length && !filteredOptions(false).length">No results found!</p>
       </div>
     </div>
-    <div class="v-select d-inline-block d-flex justify-content-center align-items-center ">
-      <form class="align-self-center" @submit.prevent="moveAllOptions()" method="post">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-right"></i></button>
-      </form>
-      <form class="align-self-center" @submit.prevent="moveOneOption()" method="post">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-right"></i></button>
-      </form>
-      <form class="align-self-center" @submit.prevent="moveOneOptionBack()" method="post">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-left"></i></button>
-      </form>
-      <form class="align-self-center" @submit.prevent="moveAllOptionsBack()" method="post">
-        <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-left"></i></button>
-      </form>
+    <div class="col-sm-2 v-select d-inline-block buttons-container-div">
+      <div class="buttons-container">
+        <form class="m-2" @submit.prevent="moveAllOptions()" method="post">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-right"></i></button>
+        </form>
+        <form class="m-2" @submit.prevent="moveOneOption()" method="post">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-right"></i></button>
+        </form>
+        <form class="m-2" @submit.prevent="moveOneOptionBack()" method="post">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-compact-left"></i></button>
+        </form>
+        <form class="m-2" @submit.prevent="moveAllOptionsBack()" method="post">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-chevron-double-left"></i></button>
+        </form>
+      </div>
     </div>
-    <div class="v-select d-inline-block">
+    <div class="col-md-5 v-select d-inline-block">
       <p>Selected carts</p>
       <div>
         <form>
@@ -160,33 +162,52 @@ export default {
 }
 </script>
 
-<style scoped>
-  .v-select {
-    width: 100%;
-    min-height: 300px;
-    cursor: pointer;
-  }
+<style lang="scss" scoped>
 
-  .v-select p {
+.v-select {
+  cursor: pointer;
+  p {
     margin: 0;
   }
+}
+.options {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  top: 20px;
+  right: 0;
+  width: 100%;
+  min-height: 300px;
+  p {
+    &:hover {
+      background: #e7e7e7;
+    }
+  }
+}
+.selectable {
+  background: #e7e7e7;
+}
 
-  .options {
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    padding: 5px;
-    position: relative;
-    top: 20px;
-    right: 0;
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .buttons-container-div {
     width: 100%;
-    min-height: 300px;
+    margin-top: 40px;
   }
+}
 
-  .options p:hover {
-    background: #e7e7e7;
+@media (min-width: 768px) {
+  .buttons-container {
+    margin-top: 160px;
+    flex-direction: column;
   }
+}
 
-  .selectable{
-    background: #e7e7e7;
-  }
 </style>
