@@ -9,7 +9,6 @@ use App\DTO\CartListDTO;
 use App\Entity\Cart;
 use App\Repository\CartRepository;
 use App\Request\CartUpsertRequest;
-use Symfony\Component\HttpFoundation\Request;
 
 class CartService
 {
@@ -35,12 +34,14 @@ class CartService
             });
     }
 
-    public function edit(int $cartId, Request $request): void
+    public function edit(int $cartId, CartUpsertRequest $request): void
     {
-        $cart = $this->cartRepository->get($cartId);
+        $cart = $this->cartRepository->find($cartId);
 
-        $cart->setName($request->query->get('name'));
-        $cart->setIsSelected($request->query->get('isSelected'));
+        $cart->setName($request->getName());
+        $cart->setIsSelected($request->getIsSelected());
+
+        $this->cartRepository->add($cart, true);
     }
 
     public function get(int $cartId): CartDTO
@@ -57,7 +58,6 @@ class CartService
     public function list(): CartListDTO
     {
         return new CartListDTO(
-            totalCount: $this->cartRepository->listCount(),
             cartDTOs: array_map(
                 function (Cart $cart) {
                     return new CartDTO(

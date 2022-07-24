@@ -11,19 +11,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('cart', name: 'api_cart_')]
+#[Route('carts', name: 'api_cart_')]
 class CartController extends AbstractController
 {
-    #[Route('/', name: 'api_cart')]
-    public function index(): JsonResponse
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/CartController.php',
-        ]);
-    }
-
-    #[Route('/list', name: 'list', methods: ['GET'])]
+    #[Route('', name: 'list', methods: ['GET'])]
     public function list(CartService $cartService): JsonResponse
     {
         $emailListDTO = $cartService->list();
@@ -48,7 +39,7 @@ class CartController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit', methods: ['POST'])]
-    public function edit(int $id, Request $request, CartService $cartService): JsonResponse
+    public function edit(int $id, CartUpsertRequest $request, CartService $cartService): JsonResponse
     {
         $cartService->edit($id, $request);
 

@@ -23,6 +23,10 @@ class CartUpsertRequest
 
     public function getIsSelected(): bool
     {
-        return $this->data->get('isSelected');
+        if ($this->data->get('isSelected') == 'true') {
+            return true;
+        }
+
+        return false;
     }
 }
