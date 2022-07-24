@@ -17,9 +17,5 @@ RUN rm /etc/localtime \
 RUN apt-get install -y libpq-dev \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-# xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
 # composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
