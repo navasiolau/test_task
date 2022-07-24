@@ -7,7 +7,7 @@
 ### Backend:
 4. docker exec -it back__php bash
 5. composer install
-6. bin/console doctrine:database:create
+6. bin/console doctrine:database:create --if-not-exists
 7. bin/console doctrine:schema:create
 
 ### Front:
