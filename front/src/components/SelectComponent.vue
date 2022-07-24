@@ -25,7 +25,7 @@
             {{ option.name }}
           </p>
         </template>
-        <p v-if="searchTermOne.length && filteredOptions.length == 0">No results found!</p>
+        <p v-if="searchTermOne.length && !filteredOptions(false).length">No results found!</p>
       </div>
     </div>
     <div class="v-select d-inline-block d-flex justify-content-center align-items-center ">
@@ -67,7 +67,7 @@
             {{ option.name }}
           </p>
         </template>
-        <p v-if="searchTermTwo.length && filteredOptions.length == 0">No results found!</p>
+        <p v-if="searchTermTwo.length && !filteredOptions(true).length">No results found!</p>
       </div>
     </div>
   </div>
