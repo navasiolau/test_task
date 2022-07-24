@@ -1,5 +1,7 @@
 <template>
-  <CreateCartComponent />
+  <CreateCartComponent
+    @updateParent="updateOptions"
+  />
 
   <SelectComponent
     :options="options"

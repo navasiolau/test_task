@@ -32,8 +32,16 @@ export default {
 
       axios.post("http://localhost:8081/carts", form).then(() => {
         cart.name = '';
+        this.updateParentOptions()
       })
-    }
+    },
+    updateParentOptions() {
+      axios
+          .get('http://localhost:8081/carts')
+          .then(response => {
+            this.$emit('updateParent', response.data.carts)
+          })
+    },
   }
 }
 </script>
