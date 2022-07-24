@@ -29,15 +29,17 @@ services:
     working_dir: /var/www/html
 
   back__db:
-    image: mysql:5.6
+    image: mariadb:10.5
     container_name: back__db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - db:/var/lib/mysql
     ports:
       - "33306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=test
 
   front__node:
     image: node:16
