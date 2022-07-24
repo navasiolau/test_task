@@ -11,6 +11,6 @@
 7. bin/console doctrine:schema:create
 
 ### Front:
-13. docker exec -it front__node bash
-14. npm install
-15. npm run build
+8. docker exec -it front__node bash
+9. npm install
+10. npm run build
