@@ -5,7 +5,7 @@
       <div>
         <form>
           <div class="mt-1">
-            <input type="text" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
+            <input type="text" v-model="searchTermOne" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
           </div>
         </form>
       </div>
@@ -13,7 +13,8 @@
           class="options"
       >
         <template
-            v-for="option in options"
+            v-if="options.length > 0"
+            v-for="option in filteredOptions(false)"
             :key="option.id"
         >
           <p
@@ -24,6 +25,7 @@
             {{ option.name }}
           </p>
         </template>
+        <p v-if="searchTermOne.length && filteredOptions.length == 0">No results found!</p>
       </div>
     </div>
     <div class="v-select d-inline-block d-flex justify-content-center align-items-center ">
@@ -45,7 +47,7 @@
       <div>
         <form>
           <div class="mt-1">
-            <input type="text" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
+            <input type="text" v-model="searchTermTwo" class="form-control" placeholder="Search for cart" aria-describedby="nameHelp">
           </div>
         </form>
       </div>
@@ -53,7 +55,8 @@
           class="options"
       >
         <template
-            v-for="option in options"
+            v-if="options.length > 0"
+            v-for="option in filteredOptions(true)"
             :key="option.id"
         >
           <p
@@ -64,6 +67,7 @@
             {{ option.name }}
           </p>
         </template>
+        <p v-if="searchTermTwo.length && filteredOptions.length == 0">No results found!</p>
       </div>
     </div>
   </div>
@@ -76,7 +80,9 @@ export default {
   name: "SelectComponent",
   data() {
     return {
-      selected: 0
+      selected: 0,
+      searchTermOne: "",
+      searchTermTwo: "",
     }
   },
   props: {
@@ -88,6 +94,20 @@ export default {
     }
   },
   methods: {
+    filteredOptions(isSelected) {
+      return this.options.filter(option => {
+        if (isSelected === true) {
+          if (option.isSelected === isSelected) {
+            return option.name.toLowerCase().includes(this.searchTermTwo.toLowerCase())
+          }
+        } else {
+          if (option.isSelected === isSelected) {
+            return option.name.toLowerCase().includes(this.searchTermOne.toLowerCase())
+          }
+        }
+      }
+      );
+    },
     selectOption(option) {
       this.selected = option.id
     },
