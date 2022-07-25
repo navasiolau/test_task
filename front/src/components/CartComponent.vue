@@ -29,6 +29,9 @@ export default {
   mounted() {
     axios
         .get('http://localhost:8081/carts')
+        .catch(response => {
+          console.log(response.data);
+        })
         .then(response => {
           this.options = response.data.carts
         })

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class ValidationException extends Exception implements ExceptionInterface
 {
-    private const STATUS_CODE = Response::HTTP_UNPROCESSABLE_ENTITY;
+    private const STATUS_CODE = Response::HTTP_BAD_REQUEST;
     private const MESSAGE = 'Validation failed';
 
     public function __construct(private readonly ConstraintViolationListInterface $errors)
